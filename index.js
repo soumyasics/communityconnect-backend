@@ -4,23 +4,19 @@ const db = require("./DBConnection");
 const app = express();
 const cors = require("cors");
 const multer = require("multer");
-// const route = require("./routes/user.routes.js");
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const userRoutes = require("./users/userRoutes.js");
 
 app.use(express.static(`${__dirname}/upload`));
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 app.get("/", (req, res) => {
-  res.send("working");
+  res.status(200).json({ message: "Tvm Community working" });
 });
 
-// app.use("/community_api", route);
+app.use("/user", userRoutes);
 
-app.listen(4003, () => {
+app.listen(5000, () => {
   console.log("Server created successfully");
 });
