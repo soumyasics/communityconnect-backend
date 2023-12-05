@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const multer = require("multer");
 const userRoutes = require("./users/userRoutes.js");
+const orphanageRoutes = require("./orphanages/orphanageRoutes.js");
 
 app.use(express.static(`${__dirname}/upload`));
 app.use(express.json());
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/orphanage", orphanageRoutes);
 
 app.listen(5000, () => {
   console.log("Server created successfully");
