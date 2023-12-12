@@ -1,4 +1,5 @@
 const UserModel = require("./userModel.js");
+const jwt = require("jsonwebtoken");
 
 const userCheck = async (req, res) => {
   try {
@@ -50,13 +51,29 @@ const userLogin = async (req, res) => {
         .json({ message: "Email or Password is incorrect" });
     }
 
+    const token = jwt.sign(
+      {
+        user: existingUser,
+      },
+      "JWT_SECRET_KEY"
+    );
+
     return res.status(200).json({
       message: "User Successfully Logged in",
       data: existingUser,
+      token,
     });
   } catch (error) {
     console.log("error on user login", error);
     return res.status(500).json({ message: "Server Error" });
   }
 };
-module.exports = { userCheck, userSignup, userLogin };
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    return res.status(200).json({ message: "Get all users.", data: users });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+module.exports = { userCheck, userSignup, userLogin, getAllUsers };

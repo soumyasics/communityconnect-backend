@@ -61,4 +61,21 @@ const orphanageLogin = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
-module.exports = { orphanageCheck, orphanageSignup, orphanageLogin };
+
+const getAllOrphanages = async (req, res) => {
+  try {
+    const orphanages = await OrphanageModel.find();
+    return res
+      .status(200)
+      .json({ message: "Get all orphanages", data: orphanages });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+module.exports = {
+  orphanageCheck,
+  orphanageSignup,
+  orphanageLogin,
+  getAllOrphanages,
+};

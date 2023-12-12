@@ -61,4 +61,20 @@ const organizationLogin = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
-module.exports = { organizationCheck, organizationSignup, organizationLogin };
+
+const getAllOrganizations = async (req, res) => {
+  try {
+    const organizations = await OrganizationModel.find();
+    return res
+      .status(200)
+      .json({ message: "Get all organizations", data: organizations });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+module.exports = {
+  organizationCheck,
+  organizationSignup,
+  organizationLogin,
+  getAllOrganizations,
+};
