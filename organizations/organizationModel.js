@@ -6,15 +6,20 @@ const organizationSchema = new mongoose.Schema(
       type: "String",
       default: null,
     },
-    yearOfEstablishment: {
+    ownerName: {
       type: "String",
       default: null,
     },
-    street: {
+    email: {
       type: "String",
-      default: null,
+      required: true,
+      unique: true,
     },
-    city: {
+    password: {
+      type: "String",
+      required: true,
+    },
+    address: {
       type: "String",
       default: null,
     },
@@ -26,26 +31,13 @@ const organizationSchema = new mongoose.Schema(
       type: "String",
       default: null,
     },
-    contact: {
+    phoneNumber: {
       type: "String",
       default: null,
     },
-    email: {
-      type: "String",
-      required: true,
-      unique: true,
-    },
-    nationality: {
-      type: "String",
+    img: {
+      type: Object,
       default: null,
-    },
-    description: {
-      type: "String",
-      default: null,
-    },
-    password: {
-      type: "String",
-      required: true,
     },
   },
   {

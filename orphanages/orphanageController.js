@@ -37,12 +37,10 @@ const orphanageSignup = async (req, res) => {
     });
     await newOrphanage.save();
 
-    return res
-      .status(201)
-      .json({
-        message: "Orphanage successfully registered",
-        data: newOrphanage,
-      });
+    return res.status(201).json({
+      message: "Orphanage successfully registered",
+      data: newOrphanage,
+    });
   } catch (error) {
     console.log("error on orphanage signup", error);
     return res.status(500).json({ message: "Server Error" });
@@ -90,9 +88,41 @@ const getAllOrphanages = async (req, res) => {
   }
 };
 
+const getOrphanageById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Id is required" });
+    }
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Id is not valid" });
+    }
+    const orphanage = await OrphanageModel.findById(id);
+    if (!orphanage) {
+      return res.status(404).json({ message: "Orphanage not found" });
+    }
+    return res
+      .status(200)
+      .json({ message: "Orphanage found", data: orphanage });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Checking if id is valid
+const isValidObjectId = (id) => {
+  const ObjectId = require("mongoose").Types.ObjectId;
+  const isValid = ObjectId.isValid(id);
+
+  // check if converting id back to a string results in same value
+  const isStringEqual = new ObjectId(id).toString() === id;
+  return isValid && isStringEqual;
+};
+
 module.exports = {
   orphanageCheck,
   orphanageSignup,
   orphanageLogin,
   getAllOrphanages,
+  getOrphanageById,
 };
