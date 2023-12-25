@@ -1,4 +1,5 @@
 const orphanageRoutes = require("express").Router();
+const {upload} = require("../middleware.js");
 const {
   orphanageCheck,
   orphanageSignup,
@@ -7,7 +8,7 @@ const {
 } = require("./orphanageController.js");
 
 orphanageRoutes.get("/", orphanageCheck);
-orphanageRoutes.post("/signup", orphanageSignup);
+orphanageRoutes.post("/signup",upload, orphanageSignup);
 orphanageRoutes.post("/login", orphanageLogin);
 orphanageRoutes.get("/get-all-orphanages", getAllOrphanages);
 

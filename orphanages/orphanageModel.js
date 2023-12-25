@@ -10,7 +10,20 @@ const orphanageSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    street: {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    purpose: {
+      type: String,
+      default: null,
+    },
+    address: {
       type: String,
       default: null,
     },
@@ -26,16 +39,7 @@ const orphanageSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    contact: {
-      type: String,
-      default: null,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    nationality: {
+    phoneNumber: {
       type: String,
       default: null,
     },
@@ -43,13 +47,9 @@ const orphanageSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    primeIntention: {
-      type: String,
+    img: {
+      type: Object,
       default: null,
-    },
-    password: {
-      type: String,
-      required: true,
     },
   },
   {

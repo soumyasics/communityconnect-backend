@@ -21,11 +21,28 @@ const orphanageSignup = async (req, res) => {
         .json({ message: "Email already taken try a different email." });
     }
 
-    const newUser = await new OrphanageModel(req.body);
-    await newUser.save();
+    const newOrphanage = await new OrphanageModel({
+      name: req?.body?.name,
+      yearOfEstablishment: req?.body?.yearOfEstablishment,
+      email: req?.body?.email,
+      password: req?.body?.password,
+      purpose: req?.body?.purpose,
+      address: req?.body?.address,
+      city: req?.body?.city,
+      state: req?.body?.state,
+      pincode: req?.body?.pincode,
+      phoneNumber: req?.body?.phoneNumber,
+      description: req?.body?.description,
+      img: req?.file,
+    });
+    await newOrphanage.save();
+
     return res
       .status(201)
-      .json({ message: "Orphanage successfully registered", data: newUser });
+      .json({
+        message: "Orphanage successfully registered",
+        data: newOrphanage,
+      });
   } catch (error) {
     console.log("error on orphanage signup", error);
     return res.status(500).json({ message: "Server Error" });
