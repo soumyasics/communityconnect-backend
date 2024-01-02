@@ -1,0 +1,120 @@
+const OrphanageModel = require("../orphanages/orphanageModel.js");
+const DonationRequestModel = require("./donationRequestModel.js");
+
+const createDonationRequest = async (req, res) => {
+  try {
+    const { orphanageId, title, targetAmount } = req.body;
+    if (!orphanageId || !title || !targetAmount) {
+      return res.status(401).json({ message: "All fields are required" });
+    }
+
+    const newRequest = await new DonationRequestModel({
+      orphanageId,
+      title,
+      targetAmount,
+      deadline: req.body?.deadline,
+      category: req.body?.category,
+      urgencyLevel: req.body?.urgencyLevel,
+      status: req.body?.status,
+      description: req.body?.description,
+      itemizedList: req.body?.itemizedList,
+      bankAcDetails: req.body?.bankAcDetails,
+    });
+    await newRequest.save();
+    console.log("new req", newRequest);
+    return res.status(201).json({
+      message: "Donation requested created successfully",
+      data: newRequest,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+const getAllRequests = async (req, res) => {
+  try {
+    const requests = await DonationRequestModel.find();
+    return res
+      .status(201)
+      .json({ message: "All donation requests", data: requests });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error: error });
+  }
+};
+
+const getAllRequestsByOrphanageId = async (req, res) => {
+  try {
+    const orphanageId = req?.params?.id;
+    if (!orphanageId) {
+      return res.status(400).json({ message: "Orphanage id is required" });
+    }
+    
+    if (!isValidObjectId(orphanageId)) {
+      return res.status(400).json({ message: "Orphanage id is not valid" });
+    }
+  
+
+    const getOrphanage = await OrphanageModel.findById(orphanageId);
+   
+    if (!getOrphanage) {
+      return res.status(404).json({ message: "Orphanage not found" });
+    }
+
+    const getAllOrphanageRequests = await DonationRequestModel.find({
+      orphanageId: req.params.orphanageId,
+    });
+
+    return res.status(200).json({
+      message: "Get all orphanage requests by id",
+      data: getAllOrphanageRequests,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+const getDonationRequestById = async (req, res) => {
+
+  try {
+    const id = req.params?.id;
+    if (!id) {
+      return res.status(400).json({message: "Id is required."})
+    }
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({message: "Id is not valid."})
+    }
+    const getRequest = await DonationRequestModel.findById(id);
+
+    if (!getRequest) {
+      return res.status(400).json ({message: "Request not found."})
+    }
+    return res.status(200).json({
+      message: "Get donation request by id",
+      data: getRequest
+    })
+    
+    
+  } catch(err) {
+    return res.status(500).send({message: "Server Error"});
+  }
+}
+
+const isValidObjectId = (id) => {
+  const ObjectId = require("mongoose").Types.ObjectId;
+  const isValid = ObjectId.isValid(id);
+  
+  if (!isValid) {
+    return false;
+  }
+  // check if converting id back to a string results in same value
+  const isStringEqual = new ObjectId(id).toString() === id;
+  return isValid && isStringEqual;
+};
+
+module.exports = {
+  createDonationRequest,
+  getAllRequests,
+  getAllRequestsByOrphanageId,
+  getDonationRequestById
+};

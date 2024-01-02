@@ -7,6 +7,7 @@ const multer = require("multer");
 const userRoutes = require("./users/userRoutes.js");
 const orphanageRoutes = require("./orphanages/orphanageRoutes.js");
 const organizationRoutes = require("./organizations/organizationRoutes.js");
+const donationRequestRoutes = require("./donationRequests/donationRequestRoutes.js");
 
 app.use(express.static(`${__dirname}/upload`));
 app.use(express.json());
@@ -20,10 +21,12 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 app.use("/orphanage", orphanageRoutes);
 app.use("/organization", organizationRoutes);
+app.use("/donation-request", donationRequestRoutes);
 
 app.all("/*", (req, res) => {
   res.status(404).json({ message: "Route not found." });
 });
-app.listen(5000, () => {
-  console.log("Server started successfully on port 5000");
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log("Server started successfully on port ", PORT);
 });
