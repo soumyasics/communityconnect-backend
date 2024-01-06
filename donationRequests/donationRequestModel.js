@@ -20,9 +20,13 @@ const donationRequestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bankAcNumber: {
+    type: String,
+    required: true,
+  },
   deadline: {
     type: Date,
-    default: getLastDayOfMonth
+    default: getLastDayOfMonth,
   },
   category: {
     type: String,
@@ -41,10 +45,10 @@ const donationRequestSchema = new mongoose.Schema({
     type: String,
     default: "Orphanage donation request",
   },
-  itemizedList: [{ item: String, quantity: Number, estimatedCost: Number }],
-  bankAcDetails: {
-    accountNumber: Number,
-    bankName: String,
+  isAdminApproved: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
   },
 });
 const DonationRequestModel = mongoose.model(

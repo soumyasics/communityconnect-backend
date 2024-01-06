@@ -3,8 +3,9 @@ const DonationRequestModel = require("./donationRequestModel.js");
 
 const createDonationRequest = async (req, res) => {
   try {
-    const { orphanageId, title, targetAmount } = req.body;
-    if (!orphanageId || !title || !targetAmount) {
+    const { orphanageId, title, targetAmount, bankAcNumber } = req.body;
+
+    if (!orphanageId || !title || !targetAmount || !bankAcNumber) {
       return res.status(401).json({ message: "All fields are required" });
     }
 
@@ -12,16 +13,14 @@ const createDonationRequest = async (req, res) => {
       orphanageId,
       title,
       targetAmount,
+      bankAcNumber,
       deadline: req.body?.deadline,
       category: req.body?.category,
       urgencyLevel: req.body?.urgencyLevel,
-      status: req.body?.status,
       description: req.body?.description,
-      itemizedList: req.body?.itemizedList,
       bankAcDetails: req.body?.bankAcDetails,
     });
     await newRequest.save();
-    console.log("new req", newRequest);
     return res.status(201).json({
       message: "Donation requested created successfully",
       data: newRequest,
@@ -33,7 +32,7 @@ const createDonationRequest = async (req, res) => {
 
 const getAllRequests = async (req, res) => {
   try {
-    const requests = await DonationRequestModel.find();
+    const requests = await DonationRequestModel.find().populate('orphanageId');
     return res
       .status(201)
       .json({ message: "All donation requests", data: requests });
@@ -48,14 +47,13 @@ const getAllRequestsByOrphanageId = async (req, res) => {
     if (!orphanageId) {
       return res.status(400).json({ message: "Orphanage id is required" });
     }
-    
+
     if (!isValidObjectId(orphanageId)) {
       return res.status(400).json({ message: "Orphanage id is not valid" });
     }
-  
 
     const getOrphanage = await OrphanageModel.findById(orphanageId);
-   
+
     if (!getOrphanage) {
       return res.status(404).json({ message: "Orphanage not found" });
     }
@@ -74,36 +72,33 @@ const getAllRequestsByOrphanageId = async (req, res) => {
 };
 
 const getDonationRequestById = async (req, res) => {
-
   try {
     const id = req.params?.id;
     if (!id) {
-      return res.status(400).json({message: "Id is required."})
+      return res.status(400).json({ message: "Id is required." });
     }
 
     if (!isValidObjectId(id)) {
-      return res.status(400).json({message: "Id is not valid."})
+      return res.status(400).json({ message: "Id is not valid." });
     }
     const getRequest = await DonationRequestModel.findById(id);
 
     if (!getRequest) {
-      return res.status(400).json ({message: "Request not found."})
+      return res.status(400).json({ message: "Request not found." });
     }
     return res.status(200).json({
       message: "Get donation request by id",
-      data: getRequest
-    })
-    
-    
-  } catch(err) {
-    return res.status(500).send({message: "Server Error"});
+      data: getRequest,
+    });
+  } catch (err) {
+    return res.status(500).send({ message: "Server Error" });
   }
-}
+};
 
 const isValidObjectId = (id) => {
   const ObjectId = require("mongoose").Types.ObjectId;
   const isValid = ObjectId.isValid(id);
-  
+
   if (!isValid) {
     return false;
   }
@@ -116,5 +111,5 @@ module.exports = {
   createDonationRequest,
   getAllRequests,
   getAllRequestsByOrphanageId,
-  getDonationRequestById
+  getDonationRequestById,
 };
