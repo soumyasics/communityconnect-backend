@@ -3,6 +3,8 @@ const {
   getAllRequests,
   getAllRequestsByOrphanageId,
   getDonationRequestById,
+  approveReqById,
+  rejectReqById,
 } = require("./donationRequestController.js");
 
 const donationRequestRoutes = require("express").Router();
@@ -18,5 +20,7 @@ donationRequestRoutes.get(
   getAllRequestsByOrphanageId
 );
 donationRequestRoutes.get("/get-donation-request/:id", getDonationRequestById);
+donationRequestRoutes.patch("/approve-donation-request/:id", approveReqById);
+donationRequestRoutes.patch("/reject-donation-request/:id", rejectReqById);
 
 module.exports = donationRequestRoutes;
