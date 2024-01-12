@@ -7,4 +7,4 @@ db.once("open", function () {
   console.log("connection successful");
 });
 
-module.exports = db;
+module.exports = db;  

@@ -34,7 +34,7 @@ const getAllRequests = async (req, res) => {
   try {
     const requests = await DonationRequestModel.find().populate("orphanageId");
     return res
-      .status(201)
+      .status(200)
       .json({ message: "All donation requests", data: requests });
   } catch (error) {
     return res.status(500).json({ message: "Server error", error: error });
@@ -81,7 +81,7 @@ const getDonationRequestById = async (req, res) => {
     if (!isValidObjectId(id)) {
       return res.status(400).json({ message: "Id is not valid." });
     }
-    const getRequest = await DonationRequestModel.findById(id);
+    const getRequest = await DonationRequestModel.findById(id).populate("orphanageId");
 
     if (!getRequest) {
       return res.status(400).json({ message: "Request not found." });
