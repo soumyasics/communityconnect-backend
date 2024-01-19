@@ -9,6 +9,11 @@ const createDonationRequest = async (req, res) => {
       return res.status(401).json({ message: "All fields are required" });
     }
 
+    const orphanage = await OrphanageModel.findById(orphanageId);
+    if (!orphanage) {
+      return res.status(404).json({ message: "Orphanage not found" });
+    }
+
     const newRequest = await new DonationRequestModel({
       orphanageId,
       title,

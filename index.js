@@ -8,6 +8,7 @@ const userRoutes = require("./users/userRoutes.js");
 const orphanageRoutes = require("./orphanages/orphanageRoutes.js");
 const organizationRoutes = require("./organizations/organizationRoutes.js");
 const donationRequestRoutes = require("./donationRequests/donationRequestRoutes.js");
+const donationRoutes = require("./donation/donationRoutes.js");
 
 app.use(express.static(`${__dirname}/upload`));
 app.use(express.json());
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 app.use("/orphanage", orphanageRoutes);
 app.use("/organization", organizationRoutes);
+app.use("/donation", donationRoutes)
 app.use("/donation-request", donationRequestRoutes);
 
 app.all("/*", (req, res) => {

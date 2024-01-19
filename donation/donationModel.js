@@ -12,7 +12,7 @@ const donationSchema = Schema(
       required: true,
     },
     donatedAmount: {
-      type: Number,
+      type: String,
       required: true,
     },
     donatedUserId: {
@@ -21,7 +21,7 @@ const donationSchema = Schema(
       default: null,
     },
     donatedOrganizationId: {
-      type: Schema.types.Objctid,
+      type: Schema.Types.ObjectId,
       ref: "Organization",
       default: null,
     },
