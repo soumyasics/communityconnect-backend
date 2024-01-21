@@ -18,7 +18,7 @@ const donationRequestSchema = new mongoose.Schema(
       required: true,
     },
     targetAmount: {
-      type: String,
+      type: Number,
       required: true,
     },
     bankAcNumber: {
@@ -50,6 +50,20 @@ const donationRequestSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
+    },
+    totallyCollectedAmount: {
+      type: Number,
+      default: 0,
+    },
+    donorsList: {
+      type: [
+        {
+          donorId: mongoose.Schema.Types.Mixed,
+          donatedAmount: Number,
+          donorName: String,
+          donorType: String
+        },
+      ],
     },
   },
   {

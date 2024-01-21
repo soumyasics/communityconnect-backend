@@ -51,6 +51,10 @@ const orphanageSchema = new mongoose.Schema(
       type: Object,
       default: null,
     },
+    totalReceivedAmt: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,

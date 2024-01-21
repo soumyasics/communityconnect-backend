@@ -39,6 +39,10 @@ const organizationSchema = new mongoose.Schema(
       type: Object,
       default: null,
     },
+    totalDonatedAmt: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,

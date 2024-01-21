@@ -13,11 +13,14 @@ const createDonationRequest = async (req, res) => {
     if (!orphanage) {
       return res.status(404).json({ message: "Orphanage not found" });
     }
-
+    let convertedAmount = Number(targetAmount);
+    if (isNaN(convertedAmount)) {
+      return res.status(401).json({ message: "Target amount is not a number" });
+    }
     const newRequest = await new DonationRequestModel({
       orphanageId,
       title,
-      targetAmount,
+      targetAmount: convertedAmount,
       bankAcNumber,
       deadline: req.body?.deadline,
       category: req.body?.category,
@@ -86,7 +89,9 @@ const getDonationRequestById = async (req, res) => {
     if (!isValidObjectId(id)) {
       return res.status(400).json({ message: "Id is not valid." });
     }
-    const getRequest = await DonationRequestModel.findById(id).populate("orphanageId");
+    const getRequest = await DonationRequestModel.findById(id).populate(
+      "orphanageId"
+    );
 
     if (!getRequest) {
       return res.status(400).json({ message: "Request not found." });
