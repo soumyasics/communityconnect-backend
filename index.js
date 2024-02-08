@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 app.use("/orphanage", orphanageRoutes);
 app.use("/organization", organizationRoutes);
-app.use("/donation", donationRoutes)
+app.use("/donation", donationRoutes);
 app.use("/donation-request", donationRequestRoutes);
 
 app.all("/*", (req, res) => {

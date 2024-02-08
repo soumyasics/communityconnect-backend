@@ -10,6 +10,8 @@ const userCheck = async (req, res) => {
 };
 
 const userSignup = async (req, res) => {
+  console.log("req file", req.file);
+  console.log('req body', req.body)
   try {
     const { firstName, email, password } = req.body;
 
