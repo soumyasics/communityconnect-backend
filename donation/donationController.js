@@ -74,9 +74,7 @@ const createDonation = async (req, res) => {
 
     if (convertedDonatedAmt > requiredAmt) {
       return res.status(400).json({
-        message: `Donated amount can't be greater than required amount.
-         Total Amount needed ${targetAmt}, donation received ${collectedAmt},
-          required Amount ${requiredAmt}. Amount you donated is ${convertedDonatedAmt}`,
+        message: `Donated amount can't be greater than required amount.`,
       });
     }
 
@@ -261,7 +259,7 @@ const donationsToASingleOrphanage = async (req, res) => {
     const donations = await DonationModel.find({ orphanageId: id })
       .populate("orphanageId")
       .populate("requestId")
-      .populate("donatedOrganizationId")
+    .populate("donatedOrganizationId")
       .populate("donatedUserId");
     if (!donations) {
       return res.status(404).json({ message: "Donation not found." });
