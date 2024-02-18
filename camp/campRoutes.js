@@ -4,7 +4,7 @@ const {
   getAllCamps,
   getCampById,
   getCampsByOwnerId,
-  participate,
+  participate,cancelParticipation
 } = require("./campController.js");
 
 campRoutes.get("/check", (req, res) => {
@@ -15,7 +15,8 @@ campRoutes.post("/create", createCamp);
 campRoutes.get("/get-all-camps", getAllCamps);
 campRoutes.get("/get-camp-by-id/:id", getCampById);
 campRoutes.get("/get-camps-by-owner-id/:id", getCampsByOwnerId);
-campRoutes.get("/participate/:id", participate);
+campRoutes.post("/participate/:id", participate);
+campRoutes.post("/cancel-participation/:id", cancelParticipation);
 
 module.exports = {
   campRoutes,

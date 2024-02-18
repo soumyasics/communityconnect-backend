@@ -57,8 +57,26 @@ const userSchema = new mongoose.Schema(
     },
     totalDonatedAmt: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+    bloodDonation: {
+      isSlotBookedOrDonated: {
+        type: Boolean,
+        default: false,
+      },
+      scheduledDate: {
+        type: Date,
+        default: null,
+      },
+      nextDonationDate: {
+        type: Date,
+        default: null,
+      },
+      bookedCampId: {
+        type: String,
+        default: null,
+      }
+    },
   },
   {
     timestamps: true,
