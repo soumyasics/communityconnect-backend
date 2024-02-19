@@ -1,4 +1,5 @@
 const OrphanageModel = require("./orphanageModel.js");
+const bcrypt = require("bcrypt");
 
 const orphanageCheck = async (req, res) => {
   try {
@@ -21,11 +22,13 @@ const orphanageSignup = async (req, res) => {
         .json({ message: "Email already taken try a different email." });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newOrphanage = await new OrphanageModel({
       name: req?.body?.name,
       yearOfEstablishment: req?.body?.yearOfEstablishment,
       email: req?.body?.email,
-      password: req?.body?.password,
+      password: hashedPassword,
       purpose: req?.body?.purpose,
       address: req?.body?.address,
       city: req?.body?.city,
@@ -61,7 +64,12 @@ const orphanageLogin = async (req, res) => {
         .json({ message: "Email or Password is incorrect" });
     }
 
-    if (existingOrphanage.password !== password) {
+    const isPasswordMatch = await bcrypt.compare(
+      password,
+      existingOrphanage.password
+    );
+
+    if (!isPasswordMatch) {
       return res
         .status(400)
         .json({ message: "Email or Password is incorrect" });

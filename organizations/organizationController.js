@@ -1,4 +1,5 @@
 const OrganizationModel = require("./organizationModel.js");
+const bcrypt = require("bcrypt");
 
 const organizationCheck = async (req, res) => {
   try {
@@ -21,11 +22,12 @@ const organizationSignup = async (req, res) => {
         .json({ message: "Email already taken. Try a different one." });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);    
     const newOrg = await new OrganizationModel({
       name: req.body?.name,
       ownerName: req.body?.ownerName,
       email: req.body?.email,
-      password: req.body?.password,
+      password: hashedPassword,
       address: req.body?.address,
       state: req.body?.state,
       pincode: req.body?.pincode,
@@ -56,7 +58,9 @@ const organizationLogin = async (req, res) => {
         .json({ message: "Email or Password is incorrect" });
     }
 
-    if (existingOrganization.password !== password) {
+    const isMatch = await bcrypt.compare(password, existingOrganization.password);
+
+    if (!isMatch) {
       return res
         .status(400)
         .json({ message: "Email or Password is incorrect" });

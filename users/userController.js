@@ -1,7 +1,7 @@
 const UserModel = require("./userModel.js");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
-
+const bcrypt = require("bcrypt");
 const { isValidObjectId } = require("../utils/validObjectId.js");
 
 const userCheck = async (req, res) => {
@@ -13,8 +13,6 @@ const userCheck = async (req, res) => {
 };
 
 const userSignup = async (req, res) => {
-  console.log("req file", req.file);
-  console.log("req body", req.body);
   try {
     const { firstName, email, password } = req.body;
 
@@ -28,11 +26,13 @@ const userSignup = async (req, res) => {
         .json({ message: "Email already taken try a different email." });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("has", hashedPassword);
     const newUser = await new UserModel({
       firstName: req?.body?.firstName,
       lastName: req?.body?.lastName,
       email: req?.body?.email,
-      password: req?.body?.password,
+      password: hashedPassword,
       gender: req?.body?.gender,
       age: req?.body?.age,
       street: req?.body?.street,
@@ -64,7 +64,13 @@ const userLogin = async (req, res) => {
       return res.status(400).json({ message: "User doesn't exist" });
     }
 
-    if (existingUser.password !== password) {
+    const isPasswordMatch = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+    console.log("is ps match", isPasswordMatch);
+
+    if (!isPasswordMatch) {
       return res
         .status(400)
         .json({ message: "Email or Password is incorrect" });
