@@ -1,6 +1,7 @@
 const UserModel = require("./userModel.js");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const { isValidObjectId } = require("../utils/validObjectId.js");
 
@@ -27,7 +28,6 @@ const userSignup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("has", hashedPassword);
     const newUser = await new UserModel({
       firstName: req?.body?.firstName,
       lastName: req?.body?.lastName,
@@ -68,7 +68,6 @@ const userLogin = async (req, res) => {
       password,
       existingUser.password
     );
-    console.log("is ps match", isPasswordMatch);
 
     if (!isPasswordMatch) {
       return res
@@ -120,4 +119,10 @@ const getUserById = async (req, res) => {
   }
 };
 
-module.exports = { userCheck, userSignup, userLogin, getAllUsers, getUserById };
+module.exports = {
+  userCheck,
+  userSignup,
+  userLogin,
+  getAllUsers,
+  getUserById,
+};

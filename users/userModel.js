@@ -59,6 +59,10 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    passwordResetOtp: {
+      type: Number,
+      default: null,
+    },
     bloodDonation: {
       isSlotBookedOrDonated: {
         type: Boolean,
@@ -75,7 +79,7 @@ const userSchema = new mongoose.Schema(
       bookedCampId: {
         type: String,
         default: null,
-      }
+      },
     },
   },
   {
