@@ -39,7 +39,7 @@ const userSignup = async (req, res) => {
       city: req?.body?.city,
       state: req?.body?.state,
       pincode: req?.body?.pincode,
-      contact: req?.body?.contact,
+      phoneNumber: req?.body?.phoneNumber,
       nationality: req?.body?.nationality,
       img: req?.file,
     });
