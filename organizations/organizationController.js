@@ -1,5 +1,6 @@
 const OrganizationModel = require("./organizationModel.js");
 const bcrypt = require("bcrypt");
+const { isValidObjectId } = require("../utils/validObjectId.js");
 
 const organizationCheck = async (req, res) => {
   try {
@@ -86,9 +87,30 @@ const getAllOrganizations = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
+
+const getOrgById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ message: "Id is required" });
+    }
+    if (!isValidObjectId(id)) {
+      return res.status(401).json({ message: "Id is not valid" });
+    }
+    const user = await OrganizationModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "Org not found" });
+    }
+    return res.status(200).json({ message: "Org found", data: user });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 module.exports = {
   organizationCheck,
   organizationSignup,
   organizationLogin,
   getAllOrganizations,
+  getOrgById
 };

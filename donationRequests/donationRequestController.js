@@ -61,14 +61,14 @@ const getAllRequestsByOrphanageId = async (req, res) => {
     }
 
     const getOrphanage = await OrphanageModel.findById(orphanageId);
-
     if (!getOrphanage) {
       return res.status(404).json({ message: "Orphanage not found" });
     }
 
     const getAllOrphanageRequests = await DonationRequestModel.find({
-      orphanageId: req.params.orphanageId,
+      orphanageId: orphanageId,
     });
+    
 
     return res.status(200).json({
       message: "Get all orphanage requests by id",
