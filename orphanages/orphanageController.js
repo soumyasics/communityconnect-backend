@@ -117,6 +117,35 @@ const getOrphanageById = async (req, res) => {
   }
 };
 
+const editOrpById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Id is required" });
+    }
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Id is not valid" });
+    }
+    const orphanage = await OrphanageModel.findById(id);
+    if (!orphanage) {
+      return res.status(404).json({ message: "Orphanage not found" });
+    }
+    const {email} = req.body;
+    if (email) {
+      const oldUser = await OrphanageModel.findOne({ email });
+      if (oldUser) {
+        return res
+          .status(400)
+          .json({ message: "Email already taken try a different email." });
+      }
+    }
+    let updated = await OrphanageModel.findByIdAndUpdate(id, req.body, { new: true });
+    return res.status(200).json({ message: "Orphanage updated" , data: updated});
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
 // Checking if id is valid
 const isValidObjectId = (id) => {
   const ObjectId = require("mongoose").Types.ObjectId;
@@ -132,5 +161,5 @@ module.exports = {
   orphanageSignup,
   orphanageLogin,
   getAllOrphanages,
-  getOrphanageById,
+  getOrphanageById,editOrpById
 };
